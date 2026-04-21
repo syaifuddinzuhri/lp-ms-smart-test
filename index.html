@@ -96,26 +96,121 @@
       .animate-float {
         animation: float 6s ease-in-out infinite;
       }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.3s ease-out forwards;
+      }
     </style>
   </head>
 
   <body class="antialiased bg-gray-50 text-gray-900">
-    <!-- Navbar -->
     <nav
       class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
-          <!-- Logo -->
           <div class="flex items-center gap-3">
             <img src="/assets/full-logo.webp" alt="Logo" class="h-10 w-auto" />
           </div>
+
+          <div class="hidden md:flex items-center gap-8">
+            <a
+              href="#home"
+              class="text-sm font-bold text-gray-600 hover:text-emerald-600 transition-colors"
+              >Beranda</a
+            >
+            <a
+              href="#features"
+              class="text-sm font-bold text-gray-600 hover:text-emerald-600 transition-colors"
+              >Fitur</a
+            >
+            <a
+              href="#workflow"
+              class="text-sm font-bold text-gray-600 hover:text-emerald-600 transition-colors"
+              >Alur Kerja</a
+            >
+            <a
+              href="#contact"
+              class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-500/20"
+            >
+              Hubungi Kami
+            </a>
+          </div>
+
+          <div class="md:hidden flex items-center">
+            <button
+              id="mobile-menu-button"
+              class="text-gray-600 hover:text-emerald-600 focus:outline-none"
+            >
+              <svg
+                class="w-7 h-7"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  id="menu-icon"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+                <path
+                  id="close-icon"
+                  class="hidden"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden bg-white border-b border-gray-100 animate-fade-in"
+      >
+        <div class="px-4 pt-2 pb-6 space-y-2">
+          <a
+            href="#home"
+            class="mobile-link block px-4 py-3 text-base font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all"
+            >Beranda</a
+          >
+          <a
+            href="#features"
+            class="mobile-link block px-4 py-3 text-base font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all"
+            >Fitur</a
+          >
+          <a
+            href="#workflow"
+            class="mobile-link block px-4 py-3 text-base font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all"
+            >Alur Kerja</a
+          >
+          <a
+            href="#contact"
+            class="mobile-link block px-4 py-3 text-base font-bold text-emerald-600 bg-emerald-50 rounded-xl transition-all"
+            >Hubungi Kami</a
+          >
         </div>
       </div>
     </nav>
 
     <!-- Hero Section -->
     <section
+      id="home"
       class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
     >
       <!-- Background Decor -->
@@ -376,7 +471,7 @@
       </div>
     </section>
 
-    <section class="py-24 bg-white relative overflow-hidden">
+    <section class="py-24 bg-white relative overflow-hidden" id="workflow">
       <div
         class="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent hidden md:block"
       ></div>
@@ -386,7 +481,7 @@
           <div
             class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 text-green-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4"
           >
-            Workflow
+            Alur Kerja
           </div>
           <h2 class="text-4xl lg:text-5xl font-black text-gray-900 mb-6">
             Mulai Ujian dalam
@@ -525,7 +620,12 @@
       </div>
     </section>
 
-    <section class="py-24 bg-white" data-aos="fade-up" data-aos-delay="100">
+    <section
+      class="py-24 bg-white"
+      data-aos="fade-up"
+      data-aos-delay="100"
+      id="contact"
+    >
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           class="bg-gradient-to-br from-emerald-500 to-green-700 rounded-[3rem] p-10 lg:p-16 text-center text-white shadow-2xl relative overflow-hidden group"
@@ -642,6 +742,30 @@
           nav.classList.remove("shadow-md");
           nav.classList.add("bg-white/80");
         }
+      });
+    </script>
+
+    <script>
+      const btn = document.getElementById("mobile-menu-button");
+      const menu = document.getElementById("mobile-menu");
+      const menuIcon = document.getElementById("menu-icon");
+      const closeIcon = document.getElementById("close-icon");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
+
+      // Toggle Menu
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+        menuIcon.classList.toggle("hidden");
+        closeIcon.classList.toggle("hidden");
+      });
+
+      // Tutup menu saat link diklik (untuk mobile)
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.add("hidden");
+          menuIcon.classList.remove("hidden");
+          closeIcon.classList.add("hidden");
+        });
       });
     </script>
   </body>
