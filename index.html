@@ -139,6 +139,17 @@
               class="text-sm font-bold text-gray-600 hover:text-emerald-600 transition-colors"
               >Alur Kerja</a
             >
+            <!-- <a
+              href="#"
+              target="_blank"
+              class="apk-download-btn items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-700 transition-all"
+              style="display:none"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              Download APK
+            </a> -->
             <a
               href="#contact"
               class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-500/20"
@@ -199,6 +210,17 @@
             class="mobile-link block px-4 py-3 text-base font-bold text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all"
             >Alur Kerja</a
           >
+          <a
+            href="#"
+            target="_blank"
+            class="apk-download-btn mobile-link items-center gap-3 px-4 py-3 text-base font-bold text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all"
+            style="display:none"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Download APK <span class="apk-version text-sm text-gray-500 font-normal"></span>
+          </a>
           <a
             href="#contact"
             class="mobile-link block px-4 py-3 text-base font-bold text-emerald-600 bg-emerald-50 rounded-xl transition-all"
@@ -263,9 +285,9 @@
             </p>
 
             <div
-              class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+              class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 flex-wrap"
             >
-              <a
+              <!-- <a
                 href="https://wa.me/6285648989767?text=Halo%20Admin%2C%20saya%20tertarik%20untuk%20mencoba%20Demo%20atau%20Daftar%20MS%20Smart%20Test."
                 target="_blank"
                 class="group relative w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold transition-all shadow-xl shadow-emerald-500/25 active:scale-95"
@@ -280,13 +302,26 @@
                   />
                 </svg>
                 Coba Demo / Daftar Sekarang
-              </a>
+              </a> -->
 
               <a
                 href="#features"
                 class="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-gray-900 border border-gray-200 rounded-2xl font-bold hover:bg-gray-50 transition-all shadow-lg active:scale-95"
               >
                 Lihat Fitur
+              </a>
+
+              <a
+                href="#"
+                target="_blank"
+                class="apk-download-btn w-full sm:w-auto items-center justify-center gap-3 px-8 py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-700 transition-all shadow-lg active:scale-95"
+                style="display:none"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Download APK
+                <span class="apk-version text-sm text-gray-400 font-normal"></span>
               </a>
             </div>
           </div>
@@ -727,6 +762,9 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+    </script>
+    <script>
       AOS.init({
         once: true,
         mirror: false,
@@ -743,6 +781,62 @@
           nav.classList.add("bg-white/80");
         }
       });
+    </script>
+
+    <script>
+      // =====================================================
+      // APK DINAMIS — Local Folder /apk/
+      // =====================================================
+      // Format nama file : ms-smart-v{major}.{minor}.{patch}.apk
+      // Contoh           : ms-smart-v1.0.0.apk, ms-smart-v1.2.0.apk
+      //
+      // Cara tambah versi baru:
+      // 1. Taruh file .apk di folder /apk/ sesuai format nama
+      // 2. Tambahkan nama file ke /apk/versions.json
+      // Tombol otomatis mengarah ke versi terbesar.
+
+      function parseVersion(filename) {
+        const m = filename.match(/ms-smart-v(\d+)\.(\d+)\.(\d+)\.apk$/i);
+        if (!m) return null;
+        return {
+          major: +m[1], minor: +m[2], patch: +m[3],
+          str: `${m[1]}.${m[2]}.${m[3]}`,
+          filename
+        };
+      }
+
+      async function loadApkInfo() {
+        try {
+          const res = await fetch("/apk/versions.json");
+          if (!res.ok) return;
+          const files = await res.json();
+
+          const versions = files
+            .map(parseVersion)
+            .filter(Boolean)
+            .sort((a, b) =>
+              b.major - a.major || b.minor - a.minor || b.patch - a.patch
+            );
+
+          if (!versions.length) return;
+
+          const latest = versions[0];
+          const url = `/apk/${latest.filename}`;
+
+          document.querySelectorAll(".apk-download-btn").forEach((btn) => {
+            btn.href = url;
+            btn.style.display = "flex";
+          });
+
+          document.querySelectorAll(".apk-version").forEach((el) => {
+            el.textContent = "v" + latest.str;
+          });
+        } catch (e) {
+          // Folder apk tidak tersedia — tombol APK tetap tersembunyi
+        }
+      }
+
+      loadApkInfo();
     </script>
 
     <script>
