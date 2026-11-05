@@ -807,7 +807,7 @@
 
       async function loadApkInfo() {
         try {
-          const res = await fetch("/apk/versions.json");
+          const res = await fetch("/apk/versions.json", { cache: "no-store" });
           if (!res.ok) return;
           const files = await res.json();
 
